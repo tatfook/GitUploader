@@ -1,7 +1,7 @@
 --[[
 author: LiZhiqiang
 date: 2016/07/04
-desc: time format transform （example：4000 s --> 1 h 6 m 40 s）
+desc: time format transform 拢篓example拢潞4000 s --> 1 h 6 m 40 s拢漏
 usage:
 ----------------------------------------------------------
 NPL.load("(gl)scritp/ide/System/Algorithm/timeTransform.lua");
@@ -64,5 +64,5 @@ local function timeTransfrom.format_time(secs, format)
 end
  
 function timeTransform.trans(secs) 
-    print(format_time(secs, "天:小时:分钟:秒"));
+    print(format_time(secs, "day:hour:minute:second"));
 end
