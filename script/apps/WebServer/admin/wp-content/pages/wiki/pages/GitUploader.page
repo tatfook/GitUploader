@@ -1,0 +1,33 @@
+<style type="text/css">
+.icon-upload{width:35px; height:40px; float:left;}
+.world-element{width:140px; height:158px; margin:10px; float:left;}
+.icon-world{width:70px; height:65px;margin:20px 35px;}
+.world-desc{font-size:20px; margin:40px;}
+</style>
+<script>
+window.onload = function(){
+	var oWorldList = document.getElementById("div-worldList");
+	var oWorld = oWorldList.getElementByTagName("div");
+
+
+	//var request = new XMLHttpRequest();
+	//request.open("GET", "")
+
+}
+</script>
+<!-- <p>Hello 233 from<? echo(__FILE__.."a")?> </p>  --!>
+
+<div class="toolbar">
+
+<!--  <input type="button" value="upload world" class="btn" id="btn_upload" />  --!>
+ 
+</div>
+<p>Please select repositorie to save:</p>
+<div id="div-worldList">
+	<div class="world-element"><img src="upload.jpg" class="icon-upload"><img src="world.png" class="icon-world"><span class="world-desc">world1</span></div>
+	<div class="world-element"><img src="upload.jpg" class="icon-upload"><img src="world.png" class="icon-world"><span class="world-desc">world1</span></div>
+	<div class="world-element"><img src="upload.jpg" class="icon-upload"><img src="world.png" class="icon-world"><span class="world-desc">world1</span></div>
+	<div class="world-element"><img src="upload.jpg" class="icon-upload"><img src="world.png" class="icon-world"><span class="world-desc">world1</span></div>
+	<div class="world-element"><img src="upload.jpg" class="icon-upload"><img src="world.png" class="icon-world"><span class="world-desc">world1</span></div>
+	<div class="world-element"><img src="newWorld.png" id="new"></div>
+</div>

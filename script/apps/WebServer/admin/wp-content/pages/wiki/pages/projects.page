@@ -1,0 +1,16 @@
+﻿<?npl
+
+include_once("../models/userprojects.page");
+
+projects = models.userprojects:get() or {};
+?>
+<p>
+<? for _, project in ipairs(projects) do?>
+<div>
+<? echo(project.name) ?>
+</div>
+<? end?>
+<div>
+	<button class="btn btn-primary">新建网站</button>
+</div>
+</p>

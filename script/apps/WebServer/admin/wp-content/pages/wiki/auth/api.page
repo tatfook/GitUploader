@@ -1,0 +1,45 @@
+<?npl
+NPL.load("(gl)script/ide/System/Encoding/jwt.lua");
+local jwt = commonlib.gettable("System.Encoding.jwt");
+
+include_once(WIKI_ROOT.."config/db.page");
+
+-- from user.id to site token
+function createJWT(user)
+	local id = user and user._id;
+	if(id) then
+		-- hash func "HA256"
+		return jwt.encode({id=id}, site_config().wiki.secrets.TOKEN_SECRET, nil,  site_config().wiki.token_expire or 3600);
+	end
+end
+
+-- @return user:{id}, err: 
+function decodeJWT(token)
+	return jwt.decode(token, site_config().wiki.secrets.TOKEN_SECRET, true);
+end
+
+-- call this function to ensure we are authenticated in json request
+-- @return userid, the request.userid also contains the userid
+function ensureAuthenticated()
+	if(request.userid) then
+		return request.userid;
+	end
+	if (not request:header('Authorization')) then
+		return response:status(401):send({ message = 'Please make sure your request has an Authorization header' });
+	end
+	local token = request:header('Authorization'):match("%s+(%S+)");
+	local config = include("config.page");
+	local payload, err = decodeJWT(token);
+	if(not payload) then
+		if(err == "Invalid signature") then
+			response:status(401):send({ message = "invalid token"});
+		elseif(err == "Not acceptable by exp") then
+			response:status(401):send({ message = 'Token has expired' });	
+		else
+			response:status(401):send({ message = err });	
+		end
+		exit();
+	end
+	request.userid = payload.id;
+	return request.userid;
+end

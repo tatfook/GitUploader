@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- web server configuration file: this node can be child node, thus embedded in shared xml -->
+<WebServer>
+  <!--which HTTP ip and port this server listens to. -->
+  <servers>
+    <!--
+    @param host, port: which ip port to listen to. if * it means all.
+    @param polling_interval: time in milliseconds to poll(socket.select) to sending/receiving data. default to 10 milliseconds, which is as fast as possible.
+    @param thread_name: which NPL host_state_name (thread) this server runs on. if "" or omitted, it means the calling thread. 
+     one thread can only host one http server. 
+    -->
+    <server host="*" port="8080" polling_interval="100" host_state_name="">
+      <defaultHost rules_id="simple_rule"></defaultHost>
+      <virtualhosts>
+        <host name="www.sitename.com" rules_id="simple_rule"></host>
+      </virtualhosts>
+    </server>
+  </servers>
+  <!--rules used when starting a web server. Multiple rules with different id can be defined. -->
+  <rules id="simple_rule">
+    <!--URI map everything without extension to index.page-->
+    <rule match='{"^[^%./]*/$", "^[/%w_]+$", "robots.txt"}' with="WebServer.redirecthandler" params='{"/index.page"}'></rule>
+    <!--npl script example-->
+    <!--<rule match="%.lua$" with="WebServer.makeGenericHandler" params='{docroot="script/apps/WebServer/test", params={}, extra_vars=nil}'></rule>-->
+    <rule match="%.lua$" with="WebServer.npl_script_handler" params='%CD%'></rule>
+    <!--npl server page example-->
+    <rule match="%.page$" with="WebServer.npl_page_handler" params='%CD%'></rule>
+    <!--Serve files statically in Textures, model, character directory, so that we can use any available png textures. -->
+    <rule match='{"^/?Texture/", "^/?model/", "^/?character/"}' with="WebServer.filehandler" params='{baseDir = ""}'></rule>
+    <!--serving static files in current world directory %world%. -->
+    <rule match='^/?www/' with="WebServer.filehandler" params='{baseDir = "%world%"}'></rule>
+    <!--serving static js files in runtime root directory. -->
+    <rule match='^/?script/.+%.js' with="WebServer.filehandler" params='{baseDir = ""}'></rule>
+    <!--wp framework related js, css, files-->
+    <rule match="^/?wp%-" with="WebServer.filehandler" params='{baseDir = "script/apps/WebServer/admin/", }'></rule>
+    <!--filehandler example, base dir is where the root file directory is. 
+    @param %CD%:  means current file's directory, 
+    @param nocache: when to add no cache headers on client side, turn this on only on dev server
+    -->
+    <rule match="." with="WebServer.filehandler" params='{baseDir = "%CD%", }'></rule>
+  </rules>
+  <config>
+    <table name='wiki'>
+      <table name='secrets'>
+        <!--token secret for this website-->
+        <string name='TOKEN_SECRET'>1234567890paracraftwiki</string>
+        <!--OAuth 2.0-->
+        <string name='GITHUB_SECRET'>c0ed1cc56931c99452c643a867d699d5657b4313</string>
+        <string name='GOOGLE_SECRET'>hvfQw1tFiaJ19ClqlNaBTlXQ</string>
+        <string name='FACEBOOK_SECRET'>6cac2f4d8f5fed008776a93d28369b5f</string>
+      </table>
+      <table name='clientid'>
+        <string name='GITHUB_CLIENTID'>44ed8acc9b71e36f47d8</string>
+        <string name='GOOGLE_CLIENTID'>638766295212-f99rcpljr68ld4pfmme4qrh2ru0ke4nd.apps.googleusercontent.com</string>
+        <string name='FACEBOOK_CLIENTID'>128754717528463</string>
+      </table>
+      <!--how many seconds to expire user token--> 
+      <number name='token_expire'>360000</number>
+    </table>
+  </config>
+</WebServer>

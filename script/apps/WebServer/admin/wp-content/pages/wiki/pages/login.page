@@ -1,0 +1,8 @@
+﻿<div class="padding:10px" >
+	<div ng-if="!isAuthenticated()">
+		<a class="btn btn-primary" ng-click="login()">点击登录Paracraft</a>
+	</div>
+	<div ng-if="isAuthenticated()">
+		<a href="GitUploader">您已经登录,点击上传世界</a>
+	</div>
+</div>
