@@ -5,4 +5,4 @@
 4. get token
 5. https://api.github.com/user?access_token=xxx
 
-[click the url] (https://github.com/login/oauth/authorize?scope=user:email&client_id=44ed8acc9b71e36f47d8)
+[click the url https://github.com/login/oauth/authorize?scope=user:email&client_id=44ed8acc9b71e36f47d8] (https://github.com/login/oauth/authorize?scope=user:email&client_id=44ed8acc9b71e36f47d8)
