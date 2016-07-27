@@ -7,6 +7,42 @@
     <Filter Include="Mod\GitUploader">
       <UniqueIdentifier>{6f496cf8-66e3-426f-a6a6-59a51e878ef4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{71c5919f-7d78-4415-a607-61ef17bd833f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps">
+      <UniqueIdentifier>{6ccca6b4-16cf-4bba-b859-caebf8587946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer">
+      <UniqueIdentifier>{ec5ea34e-f7e6-4e4a-b373-8ff83c26084a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin">
+      <UniqueIdentifier>{411e9483-40f0-4bbc-ab9b-205896597d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content">
+      <UniqueIdentifier>{fcea5d1d-2b53-4523-b0ea-bff00e76f0c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages">
+      <UniqueIdentifier>{512c0035-6f1e-4ba4-b362-80ff7281f5c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader">
+      <UniqueIdentifier>{b9d4a979-1d47-4d52-b874-6b8731c19c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader\controllers">
+      <UniqueIdentifier>{c1c286e8-59e0-415f-b391-a1359643acbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader\templates">
+      <UniqueIdentifier>{c14ecba9-c329-411e-83fc-4a3907ec3fb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets">
+      <UniqueIdentifier>{04a9cdd3-c8b5-4265-a954-5a4df46f37a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid">
+      <UniqueIdentifier>{da3f86de-a029-44d9-a57e-64588231cfdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="script\apps\WebServer\admin\wp-content\pages\gituploader\services">
+      <UniqueIdentifier>{f54c648f-5f3f-4115-b6d9-2c143b6aa267}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -18,5 +54,40 @@
     <None Include="Mod\GitUploader\main.lua">
       <Filter>Mod\GitUploader</Filter>
     </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\app.js">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\GitUploader.page">
+      <Filter>script\apps\WebServer\admin\wp-content\pages</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\templates\GitUploaderTemplate.html">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\templates</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\controllers\GitUploaderController.js">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\controllers</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.min.css">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.min.js">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.svg">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.woff">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\services\GithubService.js">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\services</Filter>
+    </None>
+    <None Include="script\apps\WebServer\admin\wp-content\pages\TempGithub.page">
+      <Filter>script\apps\WebServer\admin\wp-content\pages</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.ttf">
+      <Filter>script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid</Filter>
+    </Font>
   </ItemGroup>
 </Project>

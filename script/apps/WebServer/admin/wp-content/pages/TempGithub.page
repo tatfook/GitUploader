@@ -1,0 +1,23 @@
+<?npl
+	
+local accessTokenUrl = 'https://github.com/login/oauth/access_token';
+local userApiUrl = 'https://api.github.com/user';
+local params = {
+	code = request:get("code"),
+	client_id = request:get("clientId"),
+	client_secret = "c0ed1cc56931c99452c643a867d699d5657b4313",
+	redirect_uri = request:get("redirectUri"),
+};
+
+response:Begin();
+
+util.GetUrl({url = accessTokenUrl, qs = params }, function(err, msg, data)
+	local accessToken = util.parse_str(data);
+		
+	if(accessToken and accessToken.error) then
+		response:send(accessToken);
+		return;
+	end
+	response:send({ token = accessToken.access_token });
+end);
+

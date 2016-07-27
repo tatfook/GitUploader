@@ -115,6 +115,19 @@
     <None Include="Mod\GitUploader\Helper.lua" />
     <None Include="Mod\GitUploader\main.lua" />
     <None Include="Run.bat" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\GitUploader.page" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\app.js" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.min.css" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.min.js" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.svg" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.woff" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\controllers\GitUploaderController.js" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\services\GithubService.js" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\gituploader\templates\GitUploaderTemplate.html" />
+    <None Include="script\apps\WebServer\admin\wp-content\pages\TempGithub.page" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="script\apps\WebServer\admin\wp-content\pages\gituploader\assets\ui-grid\ui-grid.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
