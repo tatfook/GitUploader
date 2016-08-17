@@ -122,9 +122,13 @@ angular.module('GitUploader.GithubService', ['satellizer'])
 					'message': 'file upload',
 					'content': fileContent
 				}
+			}).then(function(response){
+				if (callback) {
+                     callback(true);
+                 }
 			}).catch(function(response){
 				if(callback){
-					callback(response.data);
+					callback(false);
 				}
 			});
 		}
