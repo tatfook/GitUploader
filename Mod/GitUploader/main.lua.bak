@@ -41,7 +41,7 @@ local function getFileContent(filePath)
 	]]
 	local fileContent = file:GetText(0, -1);
 	file:close();
-	fileContent = Encoding_.base64(fileContent);
+	fileContent = Encoding_.base64(fileContent, true);
 	return fileContent;
 end
 

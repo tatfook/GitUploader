@@ -173,7 +173,7 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 							console.log($scope.info);
 						}
 
-						($scope.info == $scope.gridOptions.length) ? (this.break, $scope.cancel(), alert('upload successfully!')) : this.continue;
+						($scope.info == $scope.gridOptions.length) ? (this.break, $scope.cancel(), alert('upload successfully')) : this.continue;
 					});
 			}
 

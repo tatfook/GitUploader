@@ -7,7 +7,7 @@ local params = {
 	client_id = request:get("clientId"),
 	client_secret = "c0ed1cc56931c99452c643a867d699d5657b4313",
 	redirect_uri = request:get("redirectUri"),
-	
+	scope = {"public_repo", "delete_repo", "admin:gpg_key"} 
 };
 
 response:Begin();

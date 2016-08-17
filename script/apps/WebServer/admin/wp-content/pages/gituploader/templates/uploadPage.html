@@ -1,0 +1,18 @@
+<div style="position:absolute;top:5px;right:10px;">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+</div>
+
+<div class="modal-header">
+    <h2>Github uploader</h2>
+	
+</div>
+
+<div class="form-actions" style="margin:20px;">
+	
+	<button class="btn btn-primary" ng-click="newRepos()" style="">new</button>
+	<input type="text" ng-model="newReposName">
+	
+	<li ng-repeat="x in userReops" style="background:#ccc;margin:10px 0;" ng-click="test(x)" style="list-style-type:none;">/{{x}}</li>
+
+	<button class="btn btn-primary btn-block" ng-click="upload()">{{str}}/{{uploadPath}}</button>
+</div>
