@@ -111,7 +111,8 @@ angular.module('GitUploader.GithubService', ['satellizer'])
 			});
 		}
 		*/
-
+		// rsync from src to github: 1 overwrite existing file, 2. delete non-existing files
+		// 3. automatically sync and create folders
 		this.upload = function(loginUser, reposName, fileName, fileContent, callback){
 
 			var uri = this.githubApi + "repos/"+loginUser+"/"+reposName+"/contents/"+fileName+"?access_token=" + $auth.getToken();
