@@ -91,16 +91,20 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
     }
 	
 })
+
 .controller('uploadCtrl', function($scope, $uibModalInstance, GithubService, $http){
 	$scope.cancel = function(){
 		$uibModalInstance.dismiss('cancel');
 	};
+
+	$scope.css = "{'border':" + 2 + "px;}";
 
 	$scope.userReops = new Array();
 	$scope.newReposName = "";
 	$scope.uploadPath = "";
 	$scope.str = 'upload to ';
 	$scope.loginUser = "";
+	$scope.progressText = "";
 
 	$scope.getLoginUser = function(){
 		GithubService.getUsername(function(data){
@@ -139,7 +143,16 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 
 	$scope.test = function(x){
 		$scope.uploadPath = x;
+		var aLi = document.getElementsByClassName('reposList');
+		for(var i = 0; i < aLi.length; i++){
+			if(aLi[i].innerHTML == "/"+x){
+				aLi[i].style.background = 'yellow';
+			}else{
+				aLi[i].style.background = '#e0e0e0';
+			}
+		}
 	};
+	
 
 	$scope.loadFiles = function (id) {
 		if (!id) {
@@ -162,20 +175,76 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 			//GithubService.upload_($scope.loginUser, $scope.uploadPath, "sss2.txt", "bHpxbHpxbHpx");
 			//GithubService.upload_($scope.loginUser, $scope.uploadPath, $scope.gridOptions[i].filename, $scope.gridOptions[i].file_content)
 			var num = "";
-			
-			for(var i = 0; i < 2*$scope.gridOptions.length; i++){
-					GithubService.upload($scope.loginUser, $scope.uploadPath, $scope.gridOptions[i].filename, $scope.gridOptions[i].file_content, function(data){
-						if(data){
-							$scope.info = $scope.info + 1;
-							console.log($scope.info);
-						}else{
-							$scope.info = $scope.info + 0;
-							console.log($scope.info);
-						}
-
-						($scope.info == $scope.gridOptions.length) ? (this.break, $scope.cancel(), alert('upload successfully')) : this.continue;
-					});
+			var finishedCount = 0; 
+			var curFileIndex = 0;
+			var totalCount = $scope.gridOptions.length;
+			var updateProgress = function(text){
+				$scope.progressText = text || (finishedCount + "/" + totalCount);
 			}
+			var uploadOne = function(){
+				if(curFileIndex < totalCount)
+				{
+					var item = $scope.gridOptions[curFileIndex];
+					curFileIndex+=1;
+					if(item){
+						GithubService.upload($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, function(bSuccess){
+							if(bSuccess){
+								finishedCount += 1;
+								if(finishedCount == totalCount)
+								{
+									alert('upload successfully!');
+									$scope.cancel();
+									//updateProgress("All Done!");
+								}
+								else{
+									uploadOne();
+								}
+								updateProgress();
+							}else{
+								GithubService.getContent($scope.loginUser, $scope.uploadPath, item.filename, function(bIsGetContent){
+									if(bIsGetContent != 'false'){
+										GithubService.update($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, bIsGetContent.sha, function(bIsUpdate){
+											if(bIsUpdate){
+												finishedCount += 1;
+												if(finishedCount == totalCount){
+													alert('upload successfully!');
+													$scope.cancel();
+													//updateProgress("All Done!");
+												}else{
+													uploadOne();
+												}
+												updateProgress(item.filename+" updated! "+finishedCount + "/" + totalCount);
+											}else{
+												updateProgress("failed to upload "+ item.filename);
+											}
+										});
+									}else{
+										updateProgress("failed to upload "+ item.filename);
+										alert('upload progress failed, please try again later!');
+									}
+								});
+							}
+							
+						});
+					}
+				}
+			};
+			
+			uploadOne();
+			updateProgress();
+			// for(var i = 0; i < 2*$scope.gridOptions.length; i++){
+			// 		GithubService.upload($scope.loginUser, $scope.uploadPath, $scope.gridOptions[i].filename, $scope.gridOptions[i].file_content, function(data){
+			// 			if(data){
+			// 				$scope.info = $scope.info + 1;
+			// 				console.log($scope.info);
+			// 			}else{
+			// 				$scope.info = $scope.info + 0;
+			// 				console.log($scope.info);
+			// 			}
+
+			// 			($scope.info == $scope.gridOptions.length) ? (this.break, $scope.cancel(), alert('upload successfully!')) : this.continue;
+			// 		});
+			// }
 
 		}
 	};

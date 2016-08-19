@@ -32,7 +32,6 @@ if(is_ajax()) then
 	local nMaxFileLevels = tonumber(request:get("max_files_level"));
 	local nMaxFilesNum = tonumber(request:get("max_files_num"));
 	local output = GitUploader:LoadFiles(world_dir,curPath,filter,nMaxFileLevels,nMaxFilesNum);
-	--wp_send_json(output, true);
 	wp_send_json(output, true);
   end)
   return;
@@ -55,6 +54,11 @@ wp_enqueue_script("gitUploaderController",		"/wp-content/pages/gituploader/contr
 
 
 ?>
+<!--
+<link rel="stylesheet" type="text/css" href="/wp-content/pages/gituploader/templates/uploadPage.css" />
+--!>
+
+<script type="text/javascript" src="/wp-content/pages/gituploader/templates/uploadPage.js"></script>
 <h1>GitUploader</h1>
 <div ng-app="GitUploader_App" >
 	<gituploader-main></gituploader-main>

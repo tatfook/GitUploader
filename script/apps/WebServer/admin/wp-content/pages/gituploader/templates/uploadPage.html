@@ -1,10 +1,11 @@
+
 <div style="position:absolute;top:5px;right:10px;">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
 </div>
 
 <div class="modal-header">
-    <h2>Github uploader: {{progressText}}</h2>
-	
+    <h2>Github uploader</h2>
+	<p>{{progressText}}</p>
 </div>
 
 <div class="form-actions" style="margin:20px;">
@@ -12,7 +13,7 @@
 	<button class="btn btn-primary" ng-click="newRepos()" style="">new</button>
 	<input type="text" ng-model="newReposName">
 	
-	<li ng-repeat="x in userReops" style="background:#ccc;margin:10px 0;" ng-click="test(x)" style="list-style-type:none;">/{{x}}</li>
+	<li ng-repeat="x in userReops" style="background:#e0e0e0;margin:10px 0;list-style-type:none;font-size:15px" ng-click="test(x)" class="reposList">/{{x}}</li>
 
 	<button class="btn btn-primary btn-block" ng-click="upload()">{{str}}/{{uploadPath}}</button>
 </div>

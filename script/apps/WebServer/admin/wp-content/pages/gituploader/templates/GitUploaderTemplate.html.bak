@@ -8,9 +8,10 @@
 <p>{{userName}}</p>
 <input type="button" class="btn btn-default btn-block" ng-click="uploadPage()" value="2. 点击上传至Github账户"/>
 </div>
-<div><p>World Directory: {{world_dir}} 上传成功。</p></div>
+<div><p>World Directory: {{world_dir}}</p></div>
 <div ui-grid="gridOptions"></div>
-<!-- <div>{{gridOptions.data}}</div> 
+<div ng-repeat="x in gridOptions.data">{{x}}</div>
+<!--  
 
 <input type="button" ng-click="foo()" value="Reload"/>
 

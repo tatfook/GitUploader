@@ -27,21 +27,10 @@ local function decode_css_id(id)
 end
 
 local function getFileContent(filePath)
-	--local fileContent = "";
 	local file = ParaIO.open(filePath, "r");
-	--[[
-	if(file:IsValid()) then
-		local line=file:readline();
-		while line~=nil do 
-			fileContent = fileContent..line;
-			line=file:readline();
-		end
-		file:close();
-	end
-	]]
 	local fileContent = file:GetText(0, -1);
 	file:close();
-	fileContent = Encoding_.base64(fileContent, true);
+	fileContent = Encoding_.base64(fileContent);
 	return fileContent;
 end
 
@@ -78,8 +67,10 @@ end
 
 function GitUploader:OnDestroy()
 end
+
 function GitUploader:LoadFiles(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesNum)
 	filter = filter or "*.*";
+	--filter = filter or "*";
 	nMaxFileLevels = nMaxFileLevels or 0;
 	nMaxFilesNum = nMaxFilesNum or 500;
 	local output = {}
@@ -92,7 +83,9 @@ function GitUploader:LoadFiles(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesN
     NPL.load("(gl)script/ide/Files.lua");
 
 	local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, "*.");
-	
+	local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, "*");
+
+--[[
     for _, item in ipairs(result) do
       if(item.filesize == 0) then
         item.state = "closed"; -- this is a folder
@@ -104,20 +97,38 @@ function GitUploader:LoadFiles(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesN
         output[#output+1] = item;
       end
     end
-	local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter);
+]]
+
+local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter);
     for _, item in ipairs(result) do
-      if(item.filesize ~= 0) then
+      --if(item.filesize ~= 0) then
+      if(string.find(item.filename, '/') == nil) then
+
 	item.filename = commonlib.Encoding.DefaultToUtf8(item.filename);
-        item.id = encode_css_id(curPath..(item.filename or ""));
-
+	item.id = (curPath..(item.filename or ""));
 	item.file_path = worldDir..item.filename;
-	
-	--item.file_content = Encoding.base64(Encoding.DefaultToUtf8(getFileContent(item.file_path)), true);
-	item.file_content = getFileContent(item.file_path);
 
-	output[#output+1] = item;
+	if(item.filesize ~= 0) then 
+		
+		--item.file_content = Encoding.base64(Encoding.DefaultToUtf8(getFileContent(item.file_path)), true);
+		item.file_content = getFileContent(item.file_path);
+		output[#output+1] = item;
+	else
+		local subresult = commonlib.Files.Find({}, item.file_path, nMaxFileLevels, nMaxFilesNum, filter);
+		for _, subitem in ipairs(subresult) do
+			subitem.filename = item.filename.."/"..commonlib.Encoding.DefaultToUtf8(subitem.filename);
+			subitem.id = (curPath..(subitem.filename or ""));
+			subitem.file_path = worldDir.."/"..subitem.filename;
+			item.file_content = getFileContent(subitem.file_path);
+			output[#output+1] = subitem;
+		end
+	end
+
+	
+      
       end
     end
+
 	return output;
 end
 

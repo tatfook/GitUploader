@@ -134,5 +134,40 @@ angular.module('GitUploader.GithubService', ['satellizer'])
 			});
 		}
 
+		this.getContent = function(loginUser, reposName, fileName, callback){
+			var uri = this.githubApi + "repos/"+loginUser+"/"+reposName+"/contents/"+fileName+"?access_token=" + $auth.getToken();
+			$http.get(uri).then(function(response){
+				if (callback) {
+                     callback(response.data);
+                 }
+			}).catch(function(response){
+				if(callback){
+					callback("false");
+				}
+			});
+			
+		}
+
+		this.update = function(loginUser, reposName, fileName, fileContent, sha, callback){
+			var uri = this.githubApi + "repos/"+loginUser+"/"+reposName+"/contents/"+fileName+"?access_token=" + $auth.getToken();
+			$http({
+				method: 'PUT',
+				url: uri,
+				data: {
+					'message': 'file update',
+					'content': fileContent,
+					'sha': sha
+				}
+			}).then(function(response){
+				if (callback) {
+                     callback(true);
+                 }
+			}).catch(function(response){
+				if(callback){
+					callback(false);
+				}
+			});
+		}
+
     }])
 

@@ -91,10 +91,13 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
     }
 	
 })
+
 .controller('uploadCtrl', function($scope, $uibModalInstance, GithubService, $http){
 	$scope.cancel = function(){
 		$uibModalInstance.dismiss('cancel');
 	};
+
+	$scope.css = "{'border':" + 2 + "px;}";
 
 	$scope.userReops = new Array();
 	$scope.newReposName = "";
@@ -140,7 +143,16 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 
 	$scope.test = function(x){
 		$scope.uploadPath = x;
+		var aLi = document.getElementsByClassName('reposList');
+		for(var i = 0; i < aLi.length; i++){
+			if(aLi[i].innerHTML == "/"+x){
+				aLi[i].style.background = '#b15fff';
+			}else{
+				aLi[i].style.background = '#e0e0e0';
+			}
+		}
 	};
+	
 
 	$scope.loadFiles = function (id) {
 		if (!id) {
@@ -180,22 +192,46 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 								finishedCount += 1;
 								if(finishedCount == totalCount)
 								{
-									updateProgress("All Done!");
+									alert('upload successfully!');
+									$scope.cancel();
+									//updateProgress("All Done!");
 								}
 								else{
 									uploadOne();
 								}
 								updateProgress();
 							}else{
-								updateProgress("failed to upload "+ item.filename);
+								GithubService.getContent($scope.loginUser, $scope.uploadPath, item.filename, function(bIsGetContent){
+									if(bIsGetContent != 'false'){
+										GithubService.update($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, bIsGetContent.sha, function(bIsUpdate){
+											if(bIsUpdate){
+												finishedCount += 1;
+												if(finishedCount == totalCount){
+													alert('upload successfully!');
+													$scope.cancel();
+													//updateProgress("All Done!");
+												}else{
+													uploadOne();
+												}
+												updateProgress(item.filename+" updated! "+finishedCount + "/" + totalCount);
+											}else{
+												updateProgress("failed to upload "+ item.filename);
+											}
+										});
+									}else{
+										updateProgress("failed to upload "+ item.filename);
+										alert('upload progress failed, please try again later!');
+									}
+								});
 							}
 							
 						});
 					}
 				}
 			};
-			updateProgress();
+			
 			uploadOne();
+			updateProgress();
 			// for(var i = 0; i < 2*$scope.gridOptions.length; i++){
 			// 		GithubService.upload($scope.loginUser, $scope.uploadPath, $scope.gridOptions[i].filename, $scope.gridOptions[i].file_content, function(data){
 			// 			if(data){
