@@ -202,7 +202,7 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 								updateProgress();
 							}else{
 								GithubService.getContent($scope.loginUser, $scope.uploadPath, item.filename, function(bIsGetContent){
-									if(bIsGetContent != 'false'){
+									if(bIsGetContent != 'false' && bIsGetContent.content != item.file_content+"\n"){
 										GithubService.update($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, bIsGetContent.sha, function(bIsUpdate){
 											if(bIsUpdate){
 												finishedCount += 1;
@@ -212,12 +212,24 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 													//updateProgress("All Done!");
 												}else{
 													uploadOne();
+													
 												}
 												updateProgress(item.filename+" updated! "+finishedCount + "/" + totalCount);
 											}else{
 												updateProgress("failed to upload "+ item.filename);
 											}
 										});
+									}else if(bIsGetContent != 'false' && bIsGetContent.content == item.file_content+"\n"){
+										finishedCount += 1;
+										if(finishedCount == totalCount){
+											alert('upload successfully!');
+											$scope.cancel();
+											//updateProgress("All Done!");
+										}else{
+											uploadOne();
+											
+										}
+										updateProgress(finishedCount + "/" + totalCount);
 									}else{
 										updateProgress("failed to upload "+ item.filename);
 										alert('upload progress failed, please try again later!');

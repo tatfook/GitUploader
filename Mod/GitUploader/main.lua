@@ -13,7 +13,10 @@ NPL.load("(gl)script/ide/Encoding.lua");
 local Encoding = commonlib.gettable("commonlib.Encoding");
 
 NPL.load("(gl)script/ide/System/Encoding/base64.lua");
+NPL.load("(gl)script/ide/System/Encoding/sha1.lua");
 local Encoding_ = commonlib.gettable("System.Encoding");
+--assert(Encoding.sha1("The quick brown fox jumps over the lazy dog", "hex") == "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
+--assert(Encoding.sha1("The quick brown fox jumps over the lazy dog", "base64") == "L9ThxnotKPzthJ7hu3bnORuT6xI=");
 
 --NPL.load("(gl)Mod/GitUploader/Helper.lua");
 local GitUploader = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.GitUploader"));
@@ -30,7 +33,7 @@ local function getFileContent(filePath)
 	local file = ParaIO.open(filePath, "r");
 	local fileContent = file:GetText(0, -1);
 	file:close();
-	fileContent = Encoding_.base64(fileContent);
+	--fileContent = Encoding_.base64(fileContent);
 	return fileContent;
 end
 
@@ -112,6 +115,8 @@ local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filt
 		
 		--item.file_content = Encoding.base64(Encoding.DefaultToUtf8(getFileContent(item.file_path)), true);
 		item.file_content = getFileContent(item.file_path);
+		item.file_content = Encoding_.base64(item.file_content);
+		item.sha1 = Encoding_.sha1("blob 7\0foobar\n", "hex");
 		output[#output+1] = item;
 	else
 		local subresult = commonlib.Files.Find({}, item.file_path, nMaxFileLevels, nMaxFilesNum, filter);
@@ -120,6 +125,8 @@ local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filt
 			subitem.id = (curPath..(subitem.filename or ""));
 			subitem.file_path = worldDir.."/"..subitem.filename;
 			subitem.file_content = getFileContent(subitem.file_path);
+			subitem.file_content = Encoding_.base64(subitem.file_content);
+			item.sha1 = Encoding_.sha1("blob 7\0foobar\n", "hex");
 			output[#output+1] = subitem;
 		end
 	end
