@@ -167,9 +167,9 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 	$scope.loadFiles();
 	
 	$scope.info = 0;
+
 	$scope.upload = function(){
-		//alert($scope.gridOptions.length);
-		if($scope.uploadPath == ""){
+		if($scope.uploadPath == ""){       
 			alert("please select upload path!");
 		}else{
 			//GithubService.upload_($scope.loginUser, $scope.uploadPath, "sss2.txt", "bHpxbHpxbHpx");
@@ -181,14 +181,17 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 			var updateProgress = function(text){
 				$scope.progressText = text || (finishedCount + "/" + totalCount);
 			}
+
+			//function: upload one by one 
 			var uploadOne = function(){
-				if(curFileIndex < totalCount)
-				{
+				if(curFileIndex < totalCount){
+
+					// get the current file object to upload by index
 					var item = $scope.gridOptions[curFileIndex];
-					curFileIndex+=1;
-					if(item){
+					curFileIndex+=1;     //current file object index increase
+					if(item){    //current file object is not undefined
 						GithubService.upload($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, function(bSuccess){
-							if(bSuccess){
+							if(bSuccess){             //upload successfully then upload the next one 
 								finishedCount += 1;
 								if(finishedCount == totalCount)
 								{
@@ -200,11 +203,15 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 									uploadOne();
 								}
 								updateProgress();
-							}else{
+							}else{                 //uploading failure info states the file existed, then determine whether to update or not
+								//get the file sha value
 								GithubService.getContent($scope.loginUser, $scope.uploadPath, item.filename, function(bIsGetContent){
-									if(bIsGetContent != 'false' && bIsGetContent.content != item.file_content+"\n"){
+									
+									if(bIsGetContent != 'false' && bIsGetContent.sha != item.sha1){
+										//get file sha value successfully and remote file sha value is not equal local file sha value, it means the file need to update
+
 										GithubService.update($scope.loginUser, $scope.uploadPath, item.filename, item.file_content, bIsGetContent.sha, function(bIsUpdate){
-											if(bIsUpdate){
+											if(bIsUpdate){       //file update successfully, then current file index increase and upload the next one.
 												finishedCount += 1;
 												if(finishedCount == totalCount){
 													alert('upload successfully!');
@@ -215,22 +222,26 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 													
 												}
 												updateProgress(item.filename+" updated! "+finishedCount + "/" + totalCount);
-											}else{
+											}else{            //file update failed, prompt failing infomation to user.
 												updateProgress("failed to upload "+ item.filename);
+												alert('upload progress failed, please try again later!');
 											}
 										});
-									}else if(bIsGetContent != 'false' && bIsGetContent.content == item.file_content+"\n"){
+									}else if(bIsGetContent != 'false' && bIsGetContent.sha == item.sha1){
+										//get file sha value successfully and remote file sha value is equal local file sha value, it means the file does not need to update.
+										//upload the next one.
+
 										finishedCount += 1;
 										if(finishedCount == totalCount){
 											alert('upload successfully!');
 											$scope.cancel();
-											//updateProgress("All Done!");
 										}else{
 											uploadOne();
 											
 										}
 										updateProgress(finishedCount + "/" + totalCount);
-									}else{
+
+									}else{     //get file sha value fail, prompt failing infomation to user.
 										updateProgress("failed to upload "+ item.filename);
 										alert('upload progress failed, please try again later!');
 									}
@@ -244,19 +255,6 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 			
 			uploadOne();
 			updateProgress();
-			// for(var i = 0; i < 2*$scope.gridOptions.length; i++){
-			// 		GithubService.upload($scope.loginUser, $scope.uploadPath, $scope.gridOptions[i].filename, $scope.gridOptions[i].file_content, function(data){
-			// 			if(data){
-			// 				$scope.info = $scope.info + 1;
-			// 				console.log($scope.info);
-			// 			}else{
-			// 				$scope.info = $scope.info + 0;
-			// 				console.log($scope.info);
-			// 			}
-
-			// 			($scope.info == $scope.gridOptions.length) ? (this.break, $scope.cancel(), alert('upload successfully!')) : this.continue;
-			// 		});
-			// }
 
 		}
 	};

@@ -29,11 +29,11 @@ local function decode_css_id(id)
 	return id:gsub("#", "/");
 end
 
-local function getFileContent(filePath)
+--get file content by text
+local function getFileContent(filePath)      
 	local file = ParaIO.open(filePath, "r");
 	local fileContent = file:GetText(0, -1);
 	file:close();
-	--fileContent = Encoding_.base64(fileContent);
 	return fileContent;
 end
 
@@ -92,7 +92,7 @@ function GitUploader:LoadFiles(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesN
     for _, item in ipairs(result) do
       if(item.filesize == 0) then
         item.state = "closed"; -- this is a folder
-		item.filename = commonlib.Encoding.DefaultToUtf8(item.filename);
+	item.filename = commonlib.Encoding.DefaultToUtf8(item.filename);
         item.id = encode_css_id(curPath..(item.filename or ""));
 	
 	item.file_content = Encoding_.base64("");
@@ -104,7 +104,7 @@ function GitUploader:LoadFiles(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesN
 
 local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter);
     for _, item in ipairs(result) do
-      --if(item.filesize ~= 0) then
+
       if(string.find(item.filename, '/') == nil) then
 
 	item.filename = commonlib.Encoding.DefaultToUtf8(item.filename);
@@ -112,21 +112,31 @@ local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filt
 	item.file_path = worldDir..item.filename;
 
 	if(item.filesize ~= 0) then 
+	--current dir is file
 		
-		--item.file_content = Encoding.base64(Encoding.DefaultToUtf8(getFileContent(item.file_path)), true);
-		item.file_content = getFileContent(item.file_path);
-		item.file_content = Encoding_.base64(item.file_content);
-		item.sha1 = Encoding_.sha1("blob 7\0foobar\n", "hex");
+		--get file content by text
+		item.file_content_t = getFileContent(item.file_path);
+		--get file base64 encode
+		item.file_content = Encoding_.base64(item.file_content_t);
+		--get file sha1 value
+		item.sha1 = Encoding_.sha1("blob "..item.filesize.."\0"..item.file_content_t, "hex");
+		
 		output[#output+1] = item;
 	else
+	--current dir is folder, then find files in current dir.
+
 		local subresult = commonlib.Files.Find({}, item.file_path, nMaxFileLevels, nMaxFilesNum, filter);
+
 		for _, subitem in ipairs(subresult) do
 			subitem.filename = item.filename.."/"..commonlib.Encoding.DefaultToUtf8(subitem.filename);
 			subitem.id = (curPath..(subitem.filename or ""));
 			subitem.file_path = worldDir.."/"..subitem.filename;
-			subitem.file_content = getFileContent(subitem.file_path);
-			subitem.file_content = Encoding_.base64(subitem.file_content);
-			item.sha1 = Encoding_.sha1("blob 7\0foobar\n", "hex");
+			--get file content by text
+			subitem.file_content_t = getFileContent(subitem.file_path);
+			--get file base64 encode
+			subitem.file_content = Encoding_.base64(subitem.file_content_t);
+			--get file sha1 value
+			subitem.sha1 = Encoding_.sha1("blob "..subitem.filesize.."\0"..subitem.file_content_t, "hex");
 			output[#output+1] = subitem;
 		end
 	end
