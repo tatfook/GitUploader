@@ -136,6 +136,23 @@ local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filt
 	return output;
 end
 
+--[[
+local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter); 
+		for _, item in ipairs(result) do
+			if(string.find(item.filename, '/') == nil) then
+			--if(true) then
+				if(item.filesize ~= 0) then
+					item.filename = item.filename;
+					item.id = item.filename;
+					item.file_path = worldDir..item.filename;
+					item.file_content_t = getFileContent(item.file_path);
+					item.file_content = Encoding_.base64(item.file_content_t);
+					item.sha1 = Encoding_.sha1("blob "..item.filesize.."\0"..item.file_content_t, "hex");
+					item.needUpload = true;
+					output[#output+1] = item;
+				else
+				]]
+
 function GitUploader:LoadFiles_(worldDir,curPath,filter,nMaxFileLevels,nMaxFilesNum)
 	filter = filter or "*.*";
 	nMaxFileLevels = nMaxFileLevels or 0;

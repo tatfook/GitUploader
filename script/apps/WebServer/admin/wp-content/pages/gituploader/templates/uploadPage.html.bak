@@ -15,5 +15,5 @@
 	
 	<li ng-repeat="x in userReops" style="background:#e0e0e0;margin:10px 0;list-style-type:none;font-size:15px" ng-click="test(x)" class="reposList">/{{x}}</li>
 
-	<button class="btn btn-primary btn-block" ng-click="sync()">{{str}}/{{uploadPath}}</button>
+	<button class="btn btn-primary btn-block" ng-click="upload()">{{str}}/{{uploadPath}}</button>
 </div>

@@ -206,5 +206,31 @@ angular.module('GitUploader.GithubService', ['satellizer'])
 			});
 		}
 
+		/*
+		this.path = 'master';
+		this.getFileSha = function(loginUser, reposName){
+			this.getTree(loginUser, reposName, this.path, function(response){
+				if(response == 'false'){
+					alert('get file sha value failed!');
+				}else{
+					var fileSha = {};
+					for(var i = 0; i < response.tree.length; i++){
+						if(data.tree[i].type == 'blob'){
+							fileSha = [fileSha, {'path': data.tree[i].path, 'sha': data.tree[i].sha}];
+							//alert(fileSha[i].sha);
+						}else if(data.tree[i].type == 'tree'){
+							this.path = this.path + ":" + data.tree[i].path;
+							this.getTree(loginUser, reposName, this.path, function(){
+								
+							});
+						}else{
+							alert('get file sha value failed!');
+						}
+					}
+				}
+			});
+		}
+		*/
+
     }])
 

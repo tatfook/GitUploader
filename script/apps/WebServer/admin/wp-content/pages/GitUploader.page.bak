@@ -31,7 +31,7 @@ if(is_ajax()) then
 	local filter = request:get("filter");
 	local nMaxFileLevels = tonumber(request:get("max_files_level"));
 	local nMaxFilesNum = tonumber(request:get("max_files_num"));
-	local output = GitUploader:LoadFiles_(world_dir,curPath,filter,nMaxFileLevels,nMaxFilesNum);
+	local output = GitUploader:LoadFiles(world_dir,curPath,filter,nMaxFileLevels,nMaxFilesNum);
 	wp_send_json(output, true);
   end)
   return;
