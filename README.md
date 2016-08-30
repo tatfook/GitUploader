@@ -15,7 +15,7 @@ Recursive function to research all the files form a rootdir and lots of subdirs
 [main.lua](https://github.com/tatfook/GitUploader/blob/master/Mod/GitUploader/main.lua)
 
 ###Files sync algotirhm     
-[GitUploaderController.js](https://github.com/tatfook/GitUploader/blob/master/script/apps/WebServer/admin/wp-content/pages/gituploader/controllers/GitUploaderController.js)
+[GitUploaderController.js](https://github.com/tatfook/GitUploader/blob/master/script/apps/WebServer/admin/wp-content/pages/gituploader/controllers/GitUploaderController.js)       
 1. Get the file sha info list form github server, if success, turn to step 2, else it means selevted repos is empty, then turn to step 3  
 2. Compare the file sha info list with local ones, it has 3 situations  
 (1) file name does not exist, delete it  
