@@ -161,7 +161,7 @@ function GitUploader:LoadFiles_(worldDir,curPath,filter,nMaxFileLevels,nMaxFiles
 						--path = string.gsub(path, 'MyWorld/', 'MyWorld', 1);
 						item.file_path = path..'/'..item.filename;
 						--string.gsub(path..item.filename, '//', '/', 1);
-						item.filename = string.gsub(item.file_path, 'worlds/DesignHouse/MyWorld//', '', 1);
+						item.filename = commonlib.Encoding.DefaultToUtf8(string.gsub(item.file_path, 'worlds/DesignHouse/MyWorld//', '', 1));
 						item.id = item.filename;
 						item.file_content_t = getFileContent(item.file_path);
 						item.file_content = Encoding_.base64(item.file_content_t);
