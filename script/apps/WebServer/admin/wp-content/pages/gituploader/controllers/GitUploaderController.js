@@ -207,8 +207,9 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 				}
 			}
 
+			//get sha value of the files in github
 			GithubService.getFileShaList($scope.loginUser, $scope.uploadPath, function(returnInfo){
-				if (returnInfo != 'false')
+				if (returnInfo != 'false')            //if success, then update files
 				{
 					$scope.progressText = 'get remote file sha list successfully...';
 					var aLocalFileName = new Array();
@@ -219,17 +220,20 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 
 					var curIndex = 0;
 					var totalIndex = returnInfo.tree.length;
-					var updateOne = function(){
+					var updateOne = function(){              //update files had existed in github one by one
 						if(curIndex < totalIndex){
 							var bIsExisted = aLocalFileName.indexOf(returnInfo.tree[curIndex].path);
+							//compare the files in github with the ones in local host
 							if(bIsExisted > -1){
+								// if existed, 
 								$scope.gridOptions[bIsExisted].needUpload = false;
 								if($scope.gridOptions[bIsExisted].sha1 != returnInfo.tree[curIndex].sha){
+									//if file existed, and has different sha value, update it
 									GithubService.update($scope.loginUser, $scope.uploadPath, returnInfo.tree[curIndex].path, $scope.gridOptions[bIsExisted].file_content, returnInfo.tree[curIndex].sha, function(bIsUpdate){
 										if(bIsUpdate){
 											$scope.progressText = returnInfo.tree[curIndex].path + ' update successfully...' + (curIndex + 1) + '/' + totalIndex;
 											curIndex += 1;
-											if(curIndex >= totalIndex){
+											if(curIndex >= totalIndex){      //check whether all files have updated or not. if false, update the next one, if true, upload files.  
 												$scope.progressText = 'all file update successfully...';
 												uploadOne();
 											}else{
@@ -241,9 +245,10 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 										}
 									});
 								}else{
+									//if file exised, and has same sha value, then contain it
 									$scope.progressText = returnInfo.tree[curIndex].path + ' has existed...' + (curIndex + 1) + '/' + totalIndex;
 									curIndex += 1;
-									if(curIndex >= totalIndex){
+									if(curIndex >= totalIndex){     //check whether all files have updated or not. if false, update the next one, if true, upload files.
 										$scope.progressText = 'all file update successfully...';
 										uploadOne();
 									}else{
@@ -251,13 +256,14 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 									}
 								}
 							}else{
+								//if file does not exist, delete it
 								if(returnInfo.tree[curIndex].type == 'blob'){
 									GithubService.delete($scope.loginUser, $scope.uploadPath, returnInfo.tree[curIndex].path, returnInfo.tree[curIndex].sha, function(bIsDelete){
 										if(bIsDelete){
 											
 											$scope.progressText = returnInfo.tree[curIndex].path + ' delete successfully...' + (curIndex + 1) + '/' + totalIndex;
 											curIndex += 1;
-											if(curIndex >= totalIndex){
+											if(curIndex >= totalIndex){   //check whether all files have updated or not. if false, update the next one, if true, upload files.
 												$scope.progressText = 'all file update successfully...';
 												uploadOne();
 											}else{
@@ -270,7 +276,7 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 								}else{
 									$scope.progressText = returnInfo.tree[curIndex].path + 'has existed...' + (curIndex + 1) + '/' + totalIndex;
 									curIndex += 1;
-									if(curIndex >= totalIndex){
+									if(curIndex >= totalIndex){   //check whether all files have updated or not. if false, update the next one, if true, upload files.
 										$scope.progressText = 'all file update successfully...';
 										uploadOne();
 									}else{
@@ -288,6 +294,7 @@ angular.module('GitUploader_App', ['ngStorage', 'ui.grid', 'GitUploader.GithubSe
 					updateOne();
 
 				}else{
+					//if the repos is empty, then upload files 
 					uploadOne();
 				}
 			});
