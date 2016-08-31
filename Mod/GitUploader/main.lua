@@ -32,9 +32,11 @@ end
 --get file content by text
 local function getFileContent(filePath)      
 	local file = ParaIO.open(filePath, "r");
-	local fileContent = file:GetText(0, -1);
-	file:close();
-	return fileContent;
+	if(file:IsValid()) then
+		local fileContent = file:GetText(0, -1);
+		file:close();
+		return fileContent;
+	end
 end
 
 function GitUploader:ctor()
@@ -148,13 +150,13 @@ function GitUploader:LoadFiles_(worldDir,curPath,filter,nMaxFileLevels,nMaxFiles
 
 	NPL.load("(gl)script/ide/Files.lua");
 	
-	local result = commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter);
+	
 
 	local function filesFind(result)
 		if(type(result) == "table") then
 			for i = 1, #result do
 				local item = result[i];
-				if(string.find(item.filename, '/') == nil) then
+				if(not string.match(item.filename, '/')) then
 					if(item.filesize ~= 0) then
 						--path = string.gsub(path, 'MyWorld/', 'MyWorld', 1);
 						item.file_path = path..'/'..item.filename;
@@ -168,15 +170,18 @@ function GitUploader:LoadFiles_(worldDir,curPath,filter,nMaxFileLevels,nMaxFiles
 						output[#output+1] = item;
 					else
 						path = path ..'/'.. item.filename;
-						filesFind(commonlib.Files.Find({}, path, nMaxFileLevels, nMaxFilesNum, filter));
+						local result = commonlib.Files.Find({}, path, 0, nMaxFilesNum, filter);
+						filesFind(result);
 						path = string.gsub(path, ('/'..item.filename), '', 1);
 					end
 				end
 			end
 		end
-	end	
+	end
 
+	local result = commonlib.Files.Find({}, path, 0, nMaxFilesNum, filter);
 	filesFind(result);
+	
 	return output;
 end
 
