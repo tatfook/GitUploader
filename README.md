@@ -5,9 +5,9 @@ Ggithub cloud storage of user worlds
 [sketchboard](https://sketchboard.me/BzZs7yYZqOrl)
 
 ##The screenshot of the application
-[gui](https://github.com/tatfook/GitUploader/blob/master/screenshot/gui.png)     
-[login](https://github.com/tatfook/GitUploader/blob/master/screenshot/login.png)     
-[upload](https://github.com/tatfook/GitUploader/blob/master/screenshot/upload.png)    
+![gui](https://github.com/tatfook/GitUploader/blob/master/screenshot/gui.png)     
+![login](https://github.com/tatfook/GitUploader/blob/master/screenshot/login.png)     
+![upload](https://github.com/tatfook/GitUploader/blob/master/screenshot/upload.png)    
 
 ##Main points
 ###Files Finder
